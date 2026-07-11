@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+*{
+  font-family: "Outfit", sans-serif;
+}
+
+.auth-input {
+  width: 100%;
+  background: transparent;
+  color: #264653;
+  outline: none;
+}
+
+.auth-input::placeholder {
+  color: #6c757d;
+}
+
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover,
+.auth-input:-webkit-autofill:focus,
+.auth-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #faf7f0 inset;
+  -webkit-text-fill-color: #264653;
+  caret-color: #fff;
+  transition: background-color 9999s ease-in-out 0s;
+}
