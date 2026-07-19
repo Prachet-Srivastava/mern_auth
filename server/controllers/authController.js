@@ -227,6 +227,9 @@ export const sendResetOtp = async (req, res)=>{
             // text: `Your OTP for restting your password is ${otp}. Use this OTP to proceed with resetting your password`
             html: PASSWORD_RESET_TEMPLATE.replace("{{otp}}",otp).replace("{{email}}",user.email)
         }
+        console.log("SMTP_USER:", process.env.SMTP_USER);
+        console.log("SMTP_PASS exists:", !!process.env.SMTP_PASS);
+        console.log("SENDER:", process.env.SENDER_EMAIL);
         await transporter.sendMail(mailOptions);
         console.log("Email sent successfully");
         return res.json({ success:true, message: 'OTP Sent on Email'});
