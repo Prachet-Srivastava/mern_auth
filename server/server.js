@@ -11,19 +11,32 @@ const port = process.env.PORT || 4000
 
 connectDB();
 
-const allowedOrigins = [/^http:\/\/localhost:\d+$/, /^http:\/\/127\.0\.0\.1:\d+$/]
+const allowedOrigins = [
+  /^http:\/\/localhost:\d+$/,
+  /^http:\/\/127\.0\.0\.1:\d+$/,
+  "https://mern-auth-client-6a29.onrender.com",
+];
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
+app.use(
+  cors({
     origin: (origin, callback) => {
-        if(!origin || allowedOrigins.some(allowedOrigin => allowedOrigin.test(origin))){
-            return callback(null, true)
+      if (!origin) return callback(null, true);
+      const isAllowed = allowedOrigins.some((allowedOrigin) => {
+        if (allowedOrigin instanceof RegExp) {
+          return allowedOrigin.test(origin);
         }
-        return callback(new Error('Not allowed by CORS'))
+        return allowedOrigin === origin;
+      });
+      if (isAllowed) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
     },
-    credentials: true
-}))
+    credentials: true,
+  })
+);
         
 //API Endpoints
 app.get('/', (req,res)=> res.send("API is working fine"));
