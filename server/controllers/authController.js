@@ -201,7 +201,7 @@ export const isAuthenticated = async (req, res)=> {
 
 export const sendResetOtp = async (req, res)=>{
     const {email} = req.body || {};
-
+    console.log("Reset OTP request received for:", email);
     if(!email){
         return res.json({ success: false, message: 'Email is required'})
     }
@@ -212,14 +212,14 @@ export const sendResetOtp = async (req, res)=>{
         if(!user){
             return res.json({ success: false, message:  'User not found'});
         }
-
+        console.log("User found");
 
         const otp = String(Math.floor(100000 + Math.random() * 900000));;
         user.resetOtp = otp;
         user.resetOtpExpireAt = Date.now() + 15 *60 *1000;
         
         await user.save();
-
+        console.log("User updated. Sending email...");
         const mailOptions = {
             from: process.env.SENDER_EMAIL,
             to: user.email,
@@ -228,11 +228,13 @@ export const sendResetOtp = async (req, res)=>{
             html: PASSWORD_RESET_TEMPLATE.replace("{{otp}}",otp).replace("{{email}}",user.email)
         }
         await transporter.sendMail(mailOptions);
+        console.log("Email sent successfully");
         return res.json({ success:true, message: 'OTP Sent on Email'});
 
 
     }
     catch(error){
+        console.error("SEND RESET OTP ERROR:", error);
         return res.json({ success: false, message: error.message});
     }
 }
