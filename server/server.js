@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/mongodb.js";
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+import transporter from "./config/nodemailer.js";
 
 const app = express();
 const port = process.env.PORT || 4000
@@ -43,3 +44,12 @@ app.get('/', (req,res)=> res.send("API is working fine"));
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
 app.listen(port, ()=> console.log(`Server started on PORT: ${port}`));
+app.get("/smtp-test", async (req, res) => {
+  try {
+    await transporter.verify();
+    res.send("SMTP OK");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
